@@ -17,10 +17,15 @@ lazy_static! {
 
 #[no_mangle]
 pub unsafe extern fn puts(s: *const libc::c_char) {
+	def_log("puts".to_string());
     let rust_string = CStr::from_ptr(s)
         .to_str()
         .expect("invalid utf8")
         .replace("C", "Rust");
     let c_string = CString::new(rust_string).unwrap();
     ORIGINAL_PUTS(c_string.as_ptr())
+}
+
+pub fn def_log(name: String) {
+	println!("calling {}", name);
 }
